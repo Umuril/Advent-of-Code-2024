@@ -72,12 +72,35 @@ pub fn part_one(input: &str) -> Option<u32> {
 }
 
 fn search_cross(start: (i32, i32), rows: &Vec<&str>) -> u32 {
-    let a = rows.get(start.0 as usize - 1).unwrap().chars().nth(start.1 as usize - 1).unwrap();
-    let b = rows.get(start.0 as usize - 1).unwrap().chars().nth(start.1 as usize + 1).unwrap();
-    let c = rows.get(start.0 as usize + 1).unwrap().chars().nth(start.1 as usize - 1).unwrap();
-    let d = rows.get(start.0 as usize + 1).unwrap().chars().nth(start.1 as usize + 1).unwrap();
-    match (a,b,c,d) {
-        ('M', 'M', 'S', 'S') | ('S', 'M', 'S', 'M') | ('S', 'S', 'M', 'M')| ('M', 'S', 'M', 'S') => 1,
+    let a = rows
+        .get(start.0 as usize - 1)
+        .unwrap()
+        .chars()
+        .nth(start.1 as usize - 1)
+        .unwrap();
+    let b = rows
+        .get(start.0 as usize - 1)
+        .unwrap()
+        .chars()
+        .nth(start.1 as usize + 1)
+        .unwrap();
+    let c = rows
+        .get(start.0 as usize + 1)
+        .unwrap()
+        .chars()
+        .nth(start.1 as usize - 1)
+        .unwrap();
+    let d = rows
+        .get(start.0 as usize + 1)
+        .unwrap()
+        .chars()
+        .nth(start.1 as usize + 1)
+        .unwrap();
+    match (a, b, c, d) {
+        ('M', 'M', 'S', 'S')
+        | ('S', 'M', 'S', 'M')
+        | ('S', 'S', 'M', 'M')
+        | ('M', 'S', 'M', 'S') => 1,
         _ => 0,
     }
 }
@@ -90,7 +113,7 @@ pub fn part_two(input: &str) -> Option<u32> {
 
     for (r, row) in rows.iter().enumerate() {
         for (c, chr) in row.chars().enumerate() {
-            if r != 0 && r != rows.len() -1 && c != 0 && c != row.len() -1 && chr == 'A' {
+            if r != 0 && r != rows.len() - 1 && c != 0 && c != row.len() - 1 && chr == 'A' {
                 starts.push((r as i32, c as i32));
             }
         }
