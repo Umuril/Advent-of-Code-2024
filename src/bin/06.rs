@@ -1,16 +1,3 @@
-/*
-dhat: Total:     135,952 bytes in 397 blocks
-dhat: At t-gmax: 76,864 bytes in 131 blocks
-dhat: At t-end:  0 bytes in 0 blocks
-dhat: The data has been saved to dhat-heap.json, and is viewable with dhat/dh_view.html
-Part 1: 5030 (14.4ms)
-dhat: Total:     6,036,236,032 bytes in 2,375,430 blocks
-dhat: At t-gmax: 311,424 bytes in 263 blocks
-dhat: At t-end:  0 bytes in 0 blocks
-dhat: The data has been saved to dhat-heap.json, and is viewable with dhat/dh_view.html
-Part 2: 1928 (172.9s)
-*/
-
 use std::{
     collections::HashSet,
     fmt::{Debug, Write},
