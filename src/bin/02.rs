@@ -4,7 +4,6 @@ use nom::{
         complete::{line_ending, space1},
     },
     multi::separated_list1,
-    IResult,
 };
 
 advent_of_code::solution!(2);
@@ -17,8 +16,8 @@ fn check_row(row: &[u32]) -> bool {
 }
 
 fn parse_input(input: &str) -> Vec<Vec<u32>> {
-    let result: IResult<&str, Vec<Vec<u32>>> =
-        separated_list1(line_ending, separated_list1(space1, u32))(input);
+    let new_line = line_ending::<&str, ()>;
+    let result = separated_list1(new_line, separated_list1(space1, u32))(input);
     result.expect("Correct input format").1
 }
 

@@ -3,16 +3,16 @@ use nom::{
     character::complete::{line_ending, u32},
     multi::separated_list1,
     sequence::separated_pair,
-    IResult,
 };
 
 advent_of_code::solution!(5);
 
 fn parse_input(input: &str) -> (Vec<(u32, u32)>, Vec<Vec<u32>>) {
-    let result: IResult<&str, (Vec<(u32, u32)>, Vec<Vec<u32>>)> = separated_pair(
-        separated_list1(line_ending, separated_pair(u32, tag("|"), u32)),
+    let new_line = line_ending::<&str, ()>;
+    let result = separated_pair(
+        separated_list1(new_line, separated_pair(u32, tag("|"), u32)),
         tag("\n\n"),
-        separated_list1(line_ending, separated_list1(tag(","), u32)),
+        separated_list1(new_line, separated_list1(tag(","), u32)),
     )(input);
     result.expect("Correct input format").1
 }
@@ -43,8 +43,8 @@ pub fn part_one(input: &str) -> Option<u32> {
 fn sort_by_rules(mut update: Vec<u32>, rules: &Vec<(u32, u32)>) -> Vec<u32> {
     loop {
         let mut has_updated = false;
-        for i in 0..update.len()-1 {
-            if find_rule(rules, &[update[i+1], update[i]]) {
+        for i in 0..update.len() - 1 {
+            if find_rule(rules, &[update[i + 1], update[i]]) {
                 update.swap(i, i + 1);
                 has_updated = true;
             }

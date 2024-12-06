@@ -104,9 +104,7 @@ impl Guard {
         let (dr, dc) = self.direction.get_coordinates();
         let new_position = (self.position.0 + dr, self.position.1 + dc);
 
-        if matrix.get(self.position.0, self.position.1).is_none() {
-            return None;
-        }
+        matrix.get(self.position.0, self.position.1)?;
 
         let new_chr = matrix.get(new_position.0, new_position.1).unwrap_or('@');
 
@@ -125,7 +123,8 @@ impl Guard {
 
         matrix.update(self.position.0, self.position.1, 'X');
         self.position = new_position;
-        return Some(1);
+
+        Some(1)
     }
 
     fn rotate(&mut self) {
@@ -175,17 +174,16 @@ pub fn part_one(input: &str) -> Option<u32> {
     Some(acc)
 }
 
-fn search_loop(mut guard: Guard, mut matrix: Matrix) -> bool {
-    let mut been = HashSet::new();
+fn search_loop(guard: Guard, mut matrix: Matrix) -> Option<bool> {
+    let mut slow = guard.clone();
+    let mut fast = guard.clone();
     loop {
-        been.insert(guard.clone());
-        let steps = guard.forward(&mut matrix);
-        // dbg!(&matrix);
-        if steps.is_none() {
-            return false;
-        }
-        if been.contains(&guard) {
-            return true;
+        fast.forward(&mut matrix)?;
+        fast.forward(&mut matrix)?;
+        slow.forward(&mut matrix)?;
+
+        if slow == fast {
+            return Some(true);
         }
     }
 }
@@ -212,7 +210,7 @@ pub fn part_two(input: &str) -> Option<u32> {
     for pos in possible_positions {
         let mut test = matrix.clone();
         test.update(pos.0, pos.1, '#');
-        if search_loop(guard.clone(), test) {
+        if search_loop(guard.clone(), test).is_some() {
             acc += 1;
         }
     }

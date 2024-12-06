@@ -60,7 +60,7 @@ fn parse_part_two(input: &str) -> State {
             map(parse_mul, |pair| (None, pair)),
             value((None, (0, 0)), take(1u32)),
         )),
-        || State::new(),
+        State::new,
         |mut acc: State, item| {
             if let Some(new_state) = item.0 {
                 acc.state = new_state;

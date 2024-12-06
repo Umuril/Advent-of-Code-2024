@@ -1,7 +1,6 @@
 use nom::{
     character::complete::{alpha1, line_ending},
     multi::separated_list1,
-    IResult,
 };
 
 advent_of_code::solution!(4);
@@ -17,7 +16,7 @@ const ALL_DIRECTIONS: [(i32, i32); 8] = [
     (1, -1),
 ];
 
-fn search_from(start: (i32, i32), rows: &Vec<&str>) -> u32 {
+fn search_from(start: (i32, i32), rows: &[&str]) -> u32 {
     let mut acc = 0;
     for direction in ALL_DIRECTIONS {
         let mut pointer = start;
@@ -50,7 +49,8 @@ fn search_from(start: (i32, i32), rows: &Vec<&str>) -> u32 {
 }
 
 pub fn part_one(input: &str) -> Option<u32> {
-    let result: IResult<&str, Vec<&str>> = separated_list1(line_ending, alpha1)(input);
+    let new_line = line_ending::<&str, ()>;
+    let result = separated_list1(new_line, alpha1)(input);
     let rows: Vec<&str> = result.expect("Correct input format").1;
 
     let mut starts = Vec::new();
@@ -71,7 +71,7 @@ pub fn part_one(input: &str) -> Option<u32> {
     Some(acc)
 }
 
-fn search_cross(start: (i32, i32), rows: &Vec<&str>) -> u32 {
+fn search_cross(start: (i32, i32), rows: &[&str]) -> u32 {
     let a = rows
         .get(start.0 as usize - 1)
         .unwrap()
@@ -106,7 +106,8 @@ fn search_cross(start: (i32, i32), rows: &Vec<&str>) -> u32 {
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    let result: IResult<&str, Vec<&str>> = separated_list1(line_ending, alpha1)(input);
+    let new_line = line_ending::<&str, ()>;
+    let result = separated_list1(new_line, alpha1)(input);
     let rows: Vec<&str> = result.expect("Correct input format").1;
 
     let mut starts = Vec::new();
