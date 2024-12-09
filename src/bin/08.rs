@@ -87,7 +87,7 @@ pub fn part_one(input: &str) -> Option<u32> {
 
 pub fn part_two(input: &str) -> Option<u32> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
-    let mut matrix = Matrix::from(rows.len(), rows.len(), rows.join("").as_str());
+    let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").as_str());
 
     let mut letters: HashMap<char, Vec<(usize, usize)>> = HashMap::new();
     for r in 0..matrix.rows {
