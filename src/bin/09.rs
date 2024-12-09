@@ -74,10 +74,8 @@ pub fn part_two(input: &str) -> Option<u64> {
         }
     }
 
-    println!("{:#?}", &values);
     loop {
         current_idx -= 1;
-        // println!("{} {:?}", &current_idx, &values);
         if current_idx < 0 {
             break;
         }
