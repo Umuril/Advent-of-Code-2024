@@ -1,60 +1,7 @@
-use std::{
-    collections::HashSet,
-    fmt::{Debug, Write},
-};
-
-use nom::InputIter;
+use advent_of_code::Matrix;
+use std::collections::HashSet;
 
 advent_of_code::solution!(6);
-
-#[derive(Clone)]
-struct Matrix {
-    rows: usize,
-    cols: usize,
-    data: Vec<char>,
-}
-
-impl Matrix {
-    fn from(rows: usize, cols: usize, str: &str) -> Matrix {
-        assert_eq!(str.len(), rows * cols);
-        Matrix {
-            cols,
-            rows,
-            data: str.iter_elements().collect(),
-        }
-    }
-
-    fn get(&self, row: i32, col: i32) -> Option<char> {
-        if (0..self.rows as i32).contains(&row) && (0..self.cols as i32).contains(&col) {
-            let pos = row as usize * self.cols + col as usize;
-            let chr = *self.data.get(pos).expect("Checked");
-            return Some(chr);
-        }
-        None
-    }
-
-    fn update(&mut self, row: i32, col: i32, chr: char) -> Option<char> {
-        if (0..self.rows as i32).contains(&row) && (0..self.cols as i32).contains(&col) {
-            let pos = row as usize * self.cols + col as usize;
-            let old = *self.data.get(pos).expect("Checked");
-            *self.data.get_mut(pos).expect("Checked") = chr;
-            return Some(old);
-        }
-        None
-    }
-}
-
-impl Debug for Matrix {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        for r in 0..self.rows {
-            f.write_char('\n')?;
-            for c in 0..self.cols {
-                f.write_char(self.get(r as i32, c as i32).expect("Checked"))?;
-            }
-        }
-        Ok(())
-    }
-}
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 enum Direction {
@@ -87,15 +34,15 @@ struct Guard {
 }
 
 impl Guard {
-    fn forward(&mut self, matrix: &mut Matrix) -> Option<i32> {
+    fn forward(&mut self, matrix: &mut Matrix<u8>) -> Option<i32> {
         let (dr, dc) = self.direction.get_coordinates();
         let new_position = (self.position.0 + dr, self.position.1 + dc);
 
         matrix.get(self.position.0, self.position.1)?;
 
-        let new_chr = matrix.get(new_position.0, new_position.1).unwrap_or('@');
+        let new_chr = matrix.get(new_position.0, new_position.1).unwrap_or(&b'@');
 
-        if new_chr == '#' {
+        if *new_chr == b'#' {
             self.rotate();
             return Some(0);
         }
@@ -103,12 +50,12 @@ impl Guard {
             .get(self.position.0, self.position.1)
             .expect("Checked");
 
-        if current_pos == 'X' {
+        if *current_pos == b'X' {
             self.position = new_position;
             return Some(0);
         }
 
-        matrix.update(self.position.0, self.position.1, 'X');
+        matrix.update(self.position.0, self.position.1, b'X');
         self.position = new_position;
 
         Some(1)
@@ -123,14 +70,14 @@ impl Guard {
         }
     }
 }
-fn search_guard(matrix: &Matrix) -> Option<Guard> {
+fn search_guard(matrix: &Matrix<u8>) -> Option<Guard> {
     for r in 0..matrix.rows {
         for c in 0..matrix.cols {
             let direction = match matrix.get(r as i32, c as i32) {
-                Some('^') => UP,
-                Some('v') => DOWN,
-                Some('>') => LEFT,
-                Some('<') => RIGHT,
+                Some(b'^') => UP,
+                Some(b'v') => DOWN,
+                Some(b'>') => LEFT,
+                Some(b'<') => RIGHT,
                 _ => continue,
             };
             return Some(Guard {
@@ -145,7 +92,7 @@ fn search_guard(matrix: &Matrix) -> Option<Guard> {
 pub fn part_one(input: &str) -> Option<u32> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
 
-    let mut matrix = Matrix::from(rows.len(), rows.len(), rows.join("").as_str());
+    let mut matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
     let mut guard = search_guard(&matrix).expect("At least one guard");
 
@@ -161,7 +108,7 @@ pub fn part_one(input: &str) -> Option<u32> {
     Some(acc)
 }
 
-fn search_loop(guard: Guard, mut matrix: Matrix) -> Option<bool> {
+fn search_loop(guard: Guard, mut matrix: Matrix<u8>) -> Option<bool> {
     let mut slow = guard.clone();
     let mut fast = guard.clone();
     loop {
@@ -178,7 +125,7 @@ fn search_loop(guard: Guard, mut matrix: Matrix) -> Option<bool> {
 pub fn part_two(input: &str) -> Option<u32> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
 
-    let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").as_str());
+    let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
     let guard = search_guard(&matrix).expect("At least one guard");
 
@@ -196,7 +143,7 @@ pub fn part_two(input: &str) -> Option<u32> {
     let mut acc = 0u32;
     for pos in possible_positions {
         let mut test = matrix.clone();
-        test.update(pos.0, pos.1, '#');
+        test.update(pos.0, pos.1, b'#');
         if search_loop(guard.clone(), test).is_some() {
             acc += 1;
         }
