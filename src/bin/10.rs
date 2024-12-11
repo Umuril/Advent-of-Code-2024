@@ -5,7 +5,6 @@ use advent_of_code::Matrix;
 advent_of_code::solution!(10);
 
 const ALL_DIRECTIONS: [(i32, i32); 4] = [(1, 0), (0, 1), (-1, 0), (0, -1)];
-
 fn dfs_part_one(position: (i32, i32), matrix: &Matrix<u8>) -> HashSet<(i32, i32)> {
     let mut acc = HashSet::new();
     let current_value = matrix.get(position.0, position.1).expect("Checked");

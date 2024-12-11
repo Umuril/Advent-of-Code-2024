@@ -1,5 +1,6 @@
-use advent_of_code::Matrix;
 use std::collections::HashSet;
+
+use advent_of_code::Matrix;
 
 advent_of_code::solution!(6);
 

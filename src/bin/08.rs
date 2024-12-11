@@ -1,67 +1,19 @@
-use nom::InputIter;
 use std::collections::HashMap;
 use std::collections::HashSet;
-use std::fmt::Debug;
-use std::fmt::Write;
 
+use advent_of_code::Matrix;
 advent_of_code::solution!(8);
 
-struct Matrix {
-    rows: usize,
-    cols: usize,
-    data: Vec<char>,
-}
-
-impl Matrix {
-    fn from(rows: usize, cols: usize, str: &str) -> Matrix {
-        assert_eq!(str.len(), rows * cols);
-        Matrix {
-            cols,
-            rows,
-            data: str.iter_elements().collect(),
-        }
-    }
-
-    fn get(&self, row: i32, col: i32) -> Option<char> {
-        if (0..self.rows as i32).contains(&row) && (0..self.cols as i32).contains(&col) {
-            let pos = row as usize * self.cols + col as usize;
-            let chr = *self.data.get(pos).expect("Checked");
-            return Some(chr);
-        }
-        None
-    }
-
-    fn _update(&mut self, row: i32, col: i32, chr: char) -> Option<char> {
-        if (0..self.rows as i32).contains(&row) && (0..self.cols as i32).contains(&col) {
-            let pos = row as usize * self.cols + col as usize;
-            let old = *self.data.get(pos).expect("Checked");
-            *self.data.get_mut(pos).expect("Checked") = chr;
-            return Some(old);
-        }
-        None
-    }
-}
-impl Debug for Matrix {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        for r in 0..self.rows {
-            f.write_char('\n')?;
-            for c in 0..self.cols {
-                f.write_char(self.get(r as i32, c as i32).expect("Checked"))?;
-            }
-        }
-        Ok(())
-    }
-}
 pub fn part_one(input: &str) -> Option<u32> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
-    let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").as_str());
+    let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
-    let mut letters: HashMap<char, Vec<(usize, usize)>> = HashMap::new();
+    let mut letters: HashMap<u8, Vec<(usize, usize)>> = HashMap::new();
     for r in 0..matrix.rows {
         for c in 0..matrix.cols {
             let chr = matrix.get(r as i32, c as i32).expect("Checked");
-            if chr != '.' {
-                letters.entry(chr).or_default().push((r, c));
+            if *chr != b'.' {
+                letters.entry(*chr).or_default().push((r, c));
             }
         }
     }
@@ -87,14 +39,14 @@ pub fn part_one(input: &str) -> Option<u32> {
 
 pub fn part_two(input: &str) -> Option<u32> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
-    let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").as_str());
+    let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
-    let mut letters: HashMap<char, Vec<(usize, usize)>> = HashMap::new();
+    let mut letters: HashMap<u8, Vec<(usize, usize)>> = HashMap::new();
     for r in 0..matrix.rows {
         for c in 0..matrix.cols {
             let chr = matrix.get(r as i32, c as i32).expect("Checked");
-            if chr != '.' {
-                letters.entry(chr).or_default().push((r, c));
+            if *chr != b'.' {
+                letters.entry(*chr).or_default().push((r, c));
             }
         }
     }
