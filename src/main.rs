@@ -12,7 +12,8 @@ mod args {
 
     pub enum AppArguments {
         Download {
-            day: Day,
+            day: Option<Day>,
+            all: bool,
         },
         Read {
             day: Day,
@@ -58,7 +59,8 @@ mod args {
                 }
             }
             Some("download") => AppArguments::Download {
-                day: args.free_from_str()?,
+                all: args.contains("--all"),
+                day: args.opt_free_from_str()?,
             },
             Some("read") => AppArguments::Read {
                 day: args.free_from_str()?,
@@ -104,7 +106,7 @@ fn main() {
         Ok(args) => match args {
             AppArguments::All { release } => all::handle(release),
             AppArguments::Time { day, all, store } => time::handle(day, all, store),
-            AppArguments::Download { day } => download::handle(day),
+            AppArguments::Download { day, all } => download::handle(day, all),
             AppArguments::Read { day } => read::handle(day),
             AppArguments::Scaffold {
                 day,
@@ -113,7 +115,7 @@ fn main() {
             } => {
                 scaffold::handle(day, overwrite);
                 if download {
-                    download::handle(day);
+                    download::handle(Some(day), false);
                 }
             }
             AppArguments::Solve {
@@ -127,7 +129,7 @@ fn main() {
                 match Day::today() {
                     Some(day) => {
                         scaffold::handle(day, false);
-                        download::handle(day);
+                        download::handle(day, false);
                         read::handle(day)
                     }
                     None => {
