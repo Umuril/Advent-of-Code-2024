@@ -60,7 +60,7 @@ pub fn part_two(input: &str) -> Option<u64> {
                 let mut new_point = p1 - diff;
                 while matrix.get(&new_point).is_some() {
                     result.insert(new_point);
-                    new_point = new_point - diff;
+                    new_point -= diff;
                 }
             }
         }

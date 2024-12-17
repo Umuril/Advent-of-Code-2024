@@ -4,9 +4,11 @@ use advent_of_code::{Matrix, DOWN, LEFT, RIGHT, UP};
 
 advent_of_code::solution!(15);
 
-
 pub fn part_one(input: &str) -> Option<u64> {
-    let (part_a, part_b) = input.trim().split_once("\n\n").expect("Correct input format");
+    let (part_a, part_b) = input
+        .trim()
+        .split_once("\n\n")
+        .expect("Correct input format");
     let nrows = part_a.as_bytes().iter().filter(|&&c| c == b'\n').count() + 1;
     let ncols = part_a.find('\n').unwrap();
     let part_a = &part_a.replace('\n', "");
@@ -14,7 +16,7 @@ pub fn part_one(input: &str) -> Option<u64> {
     // println!("{}", matrix);
 
     let part_b = &part_b.replace('\n', "");
-    let moves : Vec<u8> = part_b.as_bytes().to_vec();
+    let moves: Vec<u8> = part_b.as_bytes().to_vec();
     // println!("{:?}", moves);
 
     let mut guard_pos = matrix.find(&b'@').expect("Expect one guard");

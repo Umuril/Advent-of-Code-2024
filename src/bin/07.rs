@@ -79,7 +79,7 @@ fn is_possible_part_two(total: u64, factors: &mut VecDeque<u64>) -> bool {
 
     if let Ok(c) = (a[..a.len() - b.len()]).parse::<u64>() {
         if a.ends_with(&b) && is_possible_part_two(c, &mut factors.clone()) {
-            return  true;
+            return true;
         }
     }
 
