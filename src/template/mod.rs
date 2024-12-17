@@ -23,7 +23,7 @@ pub fn read_file(folder: &str, day: Day) -> String {
     let cwd = env::current_dir().unwrap();
     let filepath = cwd.join("data").join(folder).join(format!("{day}.txt"));
     let f = fs::read_to_string(filepath);
-    f.expect(format!("could not open {} file", folder).as_str())
+    f.unwrap_or_else(|_| panic!("could not open {} file", folder))
 }
 
 /// Helper function that reads a text file to string, appending a part suffix. E.g. like `01-2.txt`.
@@ -65,7 +65,7 @@ macro_rules! solution {
             use $crate::template::runner::*;
             let input = $crate::template::read_file("inputs", DAY);
             let output = $crate::template::read_file("outputs", DAY);
-            let expected = output.split("\n").map(|x| x.parse::<u64>().unwrap_or_default()).collect();
+            let expected : Vec<u64> = output.split("\n").map(|x| x.parse::<u64>().unwrap_or_default()).collect();
             $( run_part($func, &input, DAY, $part, &expected); )*
         }
     };

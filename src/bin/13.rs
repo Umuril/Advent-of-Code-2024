@@ -90,7 +90,7 @@ pub fn part_two(input: &str) -> Option<u64> {
         g.prize.y += 10000000000000;
     });
 
-    let mut _total_tokens= 0;
+    let mut _total_tokens = 0;
     for _game in data {
         let _line1 = ();
 

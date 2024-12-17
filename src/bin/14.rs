@@ -1,6 +1,6 @@
 use core::str;
 
-use advent_of_code::Matrix;
+use advent_of_code::{Matrix, Point};
 use nom::sequence::preceded;
 use nom::{
     bytes::complete::tag,
@@ -68,7 +68,16 @@ pub fn part_two(input: &str) -> Option<u64> {
             preceded(tag("v="), separated_pair(i32, tag(","), i32)),
         ),
     )(input);
-    let data = result.expect("Correct input format").1;
+    let parsed_data = result.expect("Correct input format").1;
+    let data: Vec<(Point, Point)> = parsed_data
+        .iter()
+        .map(|((px, py), (vx, vy))| {
+            (
+                Point(*px as isize, *py as isize),
+                Point(*vx as isize, *vy as isize),
+            )
+        })
+        .collect();
 
     for sec in 0..=101 * 103 {
         let mut matrix = Matrix::from(
@@ -76,11 +85,11 @@ pub fn part_two(input: &str) -> Option<u64> {
             MAX_Y as usize,
             [b'.'; MAX_X as usize * MAX_Y as usize].to_vec(),
         );
-        for ((px, py), (vx, vy)) in &data {
-            let new_px = (px + vx * sec).rem_euclid(MAX_X as i32) as u32;
-            let new_py = (py + vy * sec).rem_euclid(MAX_Y as i32) as u32;
+        for (p, v) in &data {
+            let new_px = (p.0 + v.0 * sec).rem_euclid(MAX_X as isize);
+            let new_py = (p.1 + v.1 * sec).rem_euclid(MAX_Y as isize);
 
-            matrix.update(new_px as i32, new_py as i32, b'#');
+            matrix.update(&Point(new_px, new_py), b'#');
         }
 
         if let Ok(s) = str::from_utf8(matrix.data.as_slice()) {

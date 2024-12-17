@@ -1,62 +1,60 @@
 use std::collections::HashSet;
 
-use advent_of_code::Matrix;
+use advent_of_code::{Matrix, Point};
 
 advent_of_code::solution!(6);
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 enum Direction {
-    Up(i32, i32),
-    Down(i32, i32),
-    Left(i32, i32),
-    Right(i32, i32),
+    Up(Point),
+    Down(Point),
+    Left(Point),
+    Right(Point),
 }
 
 impl Direction {
-    fn get_coordinates(self) -> (i32, i32) {
+    fn get_coordinates(self) -> Point {
         match self {
-            Direction::Up(dr, dc) => (dr, dc),
-            Direction::Down(dr, dc) => (dr, dc),
-            Direction::Left(dr, dc) => (dr, dc),
-            Direction::Right(dr, dc) => (dr, dc),
+            Direction::Up(p) => p,
+            Direction::Down(p) => p,
+            Direction::Left(p) => p,
+            Direction::Right(p) => p,
         }
     }
 }
 
-static UP: Direction = Direction::Up(-1, 0);
-static DOWN: Direction = Direction::Down(1, 0);
-static LEFT: Direction = Direction::Left(0, -1);
-static RIGHT: Direction = Direction::Right(0, 1);
+static UP: Direction = Direction::Up(Point(-1, 0));
+static DOWN: Direction = Direction::Down(Point(1, 0));
+static LEFT: Direction = Direction::Left(Point(0, -1));
+static RIGHT: Direction = Direction::Right(Point(0, 1));
 
-#[derive(Clone, PartialEq, Eq, Hash)]
+#[derive(Clone, PartialEq, Hash)]
 struct Guard {
-    position: (i32, i32),
+    position: Point,
     direction: Direction,
 }
 
 impl Guard {
     fn forward(&mut self, matrix: &mut Matrix<u8>) -> Option<i32> {
-        let (dr, dc) = self.direction.get_coordinates();
-        let new_position = (self.position.0 + dr, self.position.1 + dc);
+        let delta = self.direction.get_coordinates();
+        let new_position = self.position + delta;
 
-        matrix.get(self.position.0, self.position.1)?;
+        matrix.get(&self.position)?;
 
-        let new_chr = matrix.get(new_position.0, new_position.1).unwrap_or(&b'@');
+        let new_chr = matrix.get(&new_position).unwrap_or(&b'@');
 
         if *new_chr == b'#' {
             self.rotate();
             return Some(0);
         }
-        let current_pos = matrix
-            .get(self.position.0, self.position.1)
-            .expect("Checked");
+        let current_pos = matrix.get(&self.position).expect("Checked");
 
         if *current_pos == b'X' {
             self.position = new_position;
             return Some(0);
         }
 
-        matrix.update(self.position.0, self.position.1, b'X');
+        matrix.update(&self.position, b'X');
         self.position = new_position;
 
         Some(1)
@@ -64,28 +62,26 @@ impl Guard {
 
     fn rotate(&mut self) {
         self.direction = match self.direction {
-            Direction::Up(_, _) => RIGHT,
-            Direction::Down(_, _) => LEFT,
-            Direction::Left(_, _) => UP,
-            Direction::Right(_, _) => DOWN,
+            Direction::Up(_) => RIGHT,
+            Direction::Down(_) => LEFT,
+            Direction::Left(_) => UP,
+            Direction::Right(_) => DOWN,
         }
     }
 }
 fn search_guard(matrix: &Matrix<u8>) -> Option<Guard> {
-    for r in 0..matrix.rows {
-        for c in 0..matrix.cols {
-            let direction = match matrix.get(r as i32, c as i32) {
-                Some(b'^') => UP,
-                Some(b'v') => DOWN,
-                Some(b'>') => LEFT,
-                Some(b'<') => RIGHT,
-                _ => continue,
-            };
-            return Some(Guard {
-                position: (r as i32, c as i32),
-                direction,
-            });
-        }
+    for p in matrix.as_points() {
+        let direction = match matrix.get(&p) {
+            Some(b'^') => UP,
+            Some(b'v') => DOWN,
+            Some(b'>') => LEFT,
+            Some(b'<') => RIGHT,
+            _ => continue,
+        };
+        return Some(Guard {
+            position: p,
+            direction,
+        });
     }
     None
 }
@@ -130,7 +126,7 @@ pub fn part_two(input: &str) -> Option<u64> {
 
     let guard = search_guard(&matrix).expect("At least one guard");
 
-    let mut possible_positions = HashSet::with_capacity(matrix.rows * matrix.cols);
+    let mut possible_positions = HashSet::with_capacity((matrix.rows * matrix.cols) as usize);
 
     let mut guarded = guard.clone();
     let mut cloned = matrix.clone();
@@ -144,7 +140,7 @@ pub fn part_two(input: &str) -> Option<u64> {
     let mut acc = 0;
     for pos in possible_positions {
         let mut test = matrix.clone();
-        test.update(pos.0, pos.1, b'#');
+        test.update(&pos, b'#');
         if search_loop(guard.clone(), test).is_some() {
             acc += 1;
         }

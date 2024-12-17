@@ -6,18 +6,29 @@ use std::process::Output;
 use std::time::{Duration, Instant};
 use std::{cmp, env, process};
 
-use crate::template::{aoc_cli, Day, ANSI_ITALIC, ANSI_RESET, ANSI_BOLD_RED, ANSI_BOLD_GREEN};
+use crate::template::{aoc_cli, Day, ANSI_BOLD_GREEN, ANSI_BOLD_RED, ANSI_ITALIC, ANSI_RESET};
 
-
-pub fn run_part<I: Copy>(func: impl Fn(I) -> Option<u64>, input: I, day: Day, part: u8, expected: &Vec<u64>) {
+pub fn run_part<I: Copy>(
+    func: impl Fn(I) -> Option<u64>,
+    input: I,
+    day: Day,
+    part: u8,
+    expected: &[u64],
+) {
     let part_str = format!("Part {part}");
 
-    let expected = expected.get(part  as usize - 1).unwrap_or(&0u64);
+    let expected = expected.get(part as usize - 1).unwrap_or(&0u64);
 
-    let (result, duration, samples) =
-        run_timed(func, input, |result| print_result(result, &part_str, "", expected));
+    let (result, duration, samples) = run_timed(func, input, |result| {
+        print_result(result, &part_str, "", expected)
+    });
 
-    print_result(&result, &part_str, &format_duration(&duration, samples), expected);
+    print_result(
+        &result,
+        &part_str,
+        &format_duration(&duration, samples),
+        expected,
+    );
 
     if let Some(result) = result {
         submit_result(result, day, part);
@@ -92,7 +103,12 @@ fn format_duration(duration: &Duration, samples: u128) -> String {
     }
 }
 
-fn print_result<T: Display + std::cmp::PartialEq>(result: &Option<T>, part: &str, duration_str: &str, expected: &T) {
+fn print_result<T: Display + std::cmp::PartialEq>(
+    result: &Option<T>,
+    part: &str,
+    duration_str: &str,
+    expected: &T,
+) {
     let is_intermediate_result = duration_str.is_empty();
 
     match result {
