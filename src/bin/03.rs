@@ -28,12 +28,13 @@ fn parse_part_one(input: &str) -> Vec<(u32, u32)> {
     x.expect("Correct input format").1
 }
 
-pub fn part_one(input: &str) -> Option<u32> {
+pub fn part_one(input: &str) -> Option<u64> {
     let data = parse_part_one(input);
     Some(
         data.iter()
             .filter(|(x, y)| *x < 1000 && *y < 1000)
             .map(|(x, y)| *x * *y)
+            .map(|x| x as u64)
             .sum(),
     )
 }
@@ -75,13 +76,14 @@ fn parse_part_two(input: &str) -> State {
     x.expect("Correct input format").1
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
+pub fn part_two(input: &str) -> Option<u64> {
     let data = parse_part_two(input);
     Some(
         data.pairs
             .iter()
             .filter(|(x, y)| *x < 1000 && *y < 1000)
             .map(|(x, y)| *x * *y)
+            .map(|x| x as u64)
             .sum(),
     )
 }

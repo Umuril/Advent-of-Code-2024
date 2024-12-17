@@ -90,18 +90,18 @@ fn search_guard(matrix: &Matrix<u8>) -> Option<Guard> {
     None
 }
 
-pub fn part_one(input: &str) -> Option<u32> {
+pub fn part_one(input: &str) -> Option<u64> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
 
     let mut matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
     let mut guard = search_guard(&matrix).expect("At least one guard");
 
-    let mut acc = 0u32;
+    let mut acc = 0;
     loop {
         let steps = guard.forward(&mut matrix);
         match steps {
-            Some(step) => acc += step as u32,
+            Some(step) => acc += step as u64,
             None => break,
         }
     }
@@ -123,7 +123,7 @@ fn search_loop(guard: Guard, mut matrix: Matrix<u8>) -> Option<bool> {
     }
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
+pub fn part_two(input: &str) -> Option<u64> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
 
     let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
@@ -141,7 +141,7 @@ pub fn part_two(input: &str) -> Option<u32> {
         }
     }
 
-    let mut acc = 0u32;
+    let mut acc = 0;
     for pos in possible_positions {
         let mut test = matrix.clone();
         test.update(pos.0, pos.1, b'#');

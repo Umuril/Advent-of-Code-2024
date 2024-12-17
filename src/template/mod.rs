@@ -13,6 +13,8 @@ mod timings;
 
 pub const ANSI_ITALIC: &str = "\x1b[3m";
 pub const ANSI_BOLD: &str = "\x1b[1m";
+pub const ANSI_BOLD_RED: &str = "\x1b[1;31m";
+pub const ANSI_BOLD_GREEN: &str = "\x1b[1;32m";
 pub const ANSI_RESET: &str = "\x1b[0m";
 
 /// Helper function that reads a text file to a string.
@@ -21,7 +23,7 @@ pub fn read_file(folder: &str, day: Day) -> String {
     let cwd = env::current_dir().unwrap();
     let filepath = cwd.join("data").join(folder).join(format!("{day}.txt"));
     let f = fs::read_to_string(filepath);
-    f.expect("could not open input file")
+    f.expect(format!("could not open {} file", folder).as_str())
 }
 
 /// Helper function that reads a text file to string, appending a part suffix. E.g. like `01-2.txt`.
@@ -62,7 +64,9 @@ macro_rules! solution {
         fn main() {
             use $crate::template::runner::*;
             let input = $crate::template::read_file("inputs", DAY);
-            $( run_part($func, &input, DAY, $part); )*
+            let output = $crate::template::read_file("outputs", DAY);
+            let expected = output.split("\n").map(|x| x.parse::<u64>().unwrap_or_default()).collect();
+            $( run_part($func, &input, DAY, $part, &expected); )*
         }
     };
 }

@@ -21,15 +21,15 @@ fn parse_input(input: &str) -> Vec<Vec<u32>> {
     result.expect("Correct input format").1
 }
 
-pub fn part_one(input: &str) -> Option<u32> {
+pub fn part_one(input: &str) -> Option<u64> {
     let data = parse_input(input);
 
     let total = data.iter().filter(|row| check_row(row)).count();
 
-    Some(total as u32)
+    Some(total as u64)
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
+pub fn part_two(input: &str) -> Option<u64> {
     let data = parse_input(input);
 
     let total = data
@@ -56,7 +56,7 @@ pub fn part_two(input: &str) -> Option<u32> {
         })
         .count();
 
-    Some(total as u32)
+    Some(total as u64)
 }
 
 #[cfg(test)]

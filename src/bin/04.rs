@@ -16,7 +16,7 @@ const ALL_DIRECTIONS: [(i32, i32); 8] = [
     (1, -1),
 ];
 
-fn search_from(start: (i32, i32), rows: &[&str]) -> u32 {
+fn search_from(start: (i32, i32), rows: &[&str]) -> u64 {
     let mut acc = 0;
     for direction in ALL_DIRECTIONS {
         let mut pointer = start;
@@ -48,7 +48,7 @@ fn search_from(start: (i32, i32), rows: &[&str]) -> u32 {
     acc
 }
 
-pub fn part_one(input: &str) -> Option<u32> {
+pub fn part_one(input: &str) -> Option<u64> {
     let new_line = line_ending::<&str, ()>;
     let result = separated_list1(new_line, alpha1)(input);
     let rows: Vec<&str> = result.expect("Correct input format").1;
@@ -71,7 +71,7 @@ pub fn part_one(input: &str) -> Option<u32> {
     Some(acc)
 }
 
-fn search_cross(start: (i32, i32), rows: &[&str]) -> u32 {
+fn search_cross(start: (i32, i32), rows: &[&str]) -> u64 {
     let a = rows
         .get(start.0 as usize - 1)
         .unwrap()
@@ -105,7 +105,7 @@ fn search_cross(start: (i32, i32), rows: &[&str]) -> u32 {
     }
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
+pub fn part_two(input: &str) -> Option<u64> {
     let new_line = line_ending::<&str, ()>;
     let result = separated_list1(new_line, alpha1)(input);
     let rows: Vec<&str> = result.expect("Correct input format").1;

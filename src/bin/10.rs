@@ -27,7 +27,7 @@ fn dfs_part_one(position: (i32, i32), matrix: &Matrix<u8>) -> HashSet<(i32, i32)
 
     acc
 }
-pub fn part_one(input: &str) -> Option<u32> {
+pub fn part_one(input: &str) -> Option<u64> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
     let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
@@ -43,13 +43,13 @@ pub fn part_one(input: &str) -> Option<u32> {
 
     let mut acc = 0;
     for start in starts {
-        acc += dfs_part_one(start, &matrix).len();
+        acc += dfs_part_one(start, &matrix).len() as u64;
     }
 
-    Some(acc as u32)
+    Some(acc)
 }
 
-fn dfs_part_two(position: (i32, i32), matrix: &Matrix<u8>) -> u32 {
+fn dfs_part_two(position: (i32, i32), matrix: &Matrix<u8>) -> u64 {
     let mut acc = 0;
     let current_value = matrix.get(position.0, position.1).expect("Checked");
     // println!("{:?} {}", position, *current_value - b'0');
@@ -68,7 +68,7 @@ fn dfs_part_two(position: (i32, i32), matrix: &Matrix<u8>) -> u32 {
     acc
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
+pub fn part_two(input: &str) -> Option<u64> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
     let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
@@ -96,7 +96,7 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let result: Option<u32> = part_one(&advent_of_code::template::read_file("examples", DAY));
+        let result= part_one(&advent_of_code::template::read_file("examples", DAY));
         assert_eq!(result, Some(36));
     }
 

@@ -1,10 +1,10 @@
-use advent_of_code::{template::commands::all, Matrix};
+use advent_of_code::Matrix;
 
 advent_of_code::solution!(12);
 
 const ALL_DIRECTIONS: [(i32, i32); 4] = [(1, 0), (0, 1), (-1, 0), (0, -1)];
 
-fn search_part_one(start: (i32, i32), matrix: &mut Matrix<u8>) -> (u32, u32) {
+fn search_part_one(start: (i32, i32), matrix: &mut Matrix<u8>) -> (u64, u64) {
     let mut area = 0;
     let mut perimeter = 0i32;
 
@@ -38,14 +38,14 @@ fn search_part_one(start: (i32, i32), matrix: &mut Matrix<u8>) -> (u32, u32) {
         }
     }
 
-    (area, perimeter as u32)
+    (area, perimeter as u64)
 }
 
-pub fn part_one(input: &str) -> Option<u32> {
+pub fn part_one(input: &str) -> Option<u64> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
     let mut matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
-    let mut acc = 0;
+    let mut acc = 0u64;
     for r in 0..matrix.rows {
         for c in 0..matrix.cols {
             let cell = matrix.get(r as i32, c as i32).unwrap();
@@ -99,7 +99,7 @@ fn search_part_two(start: (i32, i32), matrix: &mut Matrix<u8>) -> (u32, u32) {
     (area, sides as u32)
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
+pub fn part_two(input: &str) -> Option<u64> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
     let mut matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 

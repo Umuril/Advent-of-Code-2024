@@ -22,11 +22,11 @@ fn parse_part_one(input: &str) -> IResult<&str, (Vec<u32>, Vec<u32>)> {
     )(input)
 }
 
-pub fn part_one(input: &str) -> Option<u32> {
+pub fn part_one(input: &str) -> Option<u64> {
     parse_part_one(input).ok().map(|(_, (mut v1, mut v2))| {
         v1.sort();
         v2.sort();
-        zip(v1, v2).map(|(x, y)| x.abs_diff(y)).sum()
+        zip(v1, v2).map(|(x, y)| x.abs_diff(y) as u64).sum()
     })
 }
 
@@ -42,10 +42,10 @@ fn parse_part_two(input: &str) -> IResult<&str, (Vec<u32>, HashMap<u32, u32>)> {
     )(input)
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
+pub fn part_two(input: &str) -> Option<u64> {
     parse_part_two(input)
         .ok()
-        .map(|(_, (v1, v2))| v1.iter().map(|x| x * *v2.get(x).unwrap_or(&0u32)).sum())
+        .map(|(_, (v1, v2))| v1.iter().map(|x| x * *v2.get(x).unwrap_or(&0u32)).map(|x| x as u64).sum())
 }
 
 #[cfg(test)]

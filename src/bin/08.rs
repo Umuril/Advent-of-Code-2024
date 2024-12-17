@@ -4,7 +4,7 @@ use std::collections::HashSet;
 use advent_of_code::Matrix;
 advent_of_code::solution!(8);
 
-pub fn part_one(input: &str) -> Option<u32> {
+pub fn part_one(input: &str) -> Option<u64> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
     let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
@@ -34,10 +34,10 @@ pub fn part_one(input: &str) -> Option<u32> {
         }
     }
 
-    Some(result.len() as u32)
+    Some(result.len() as u64)
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
+pub fn part_two(input: &str) -> Option<u64> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
     let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
@@ -69,7 +69,7 @@ pub fn part_two(input: &str) -> Option<u32> {
         }
     }
 
-    Some(result.len() as u32)
+    Some(result.len() as u64)
 }
 
 #[cfg(test)]

@@ -27,7 +27,7 @@ fn find_rule(rules: &Vec<(u32, u32)>, pair: &[u32]) -> bool {
     false
 }
 
-pub fn part_one(input: &str) -> Option<u32> {
+pub fn part_one(input: &str) -> Option<u64> {
     let (rules, updates) = parse_input(input);
     let mut acc = 0;
     for update in &updates {
@@ -37,7 +37,7 @@ pub fn part_one(input: &str) -> Option<u32> {
         }
     }
 
-    Some(acc)
+    Some(acc as u64)
 }
 
 fn sort_by_rules(mut update: Vec<u32>, rules: &Vec<(u32, u32)>) -> Vec<u32> {
@@ -56,7 +56,7 @@ fn sort_by_rules(mut update: Vec<u32>, rules: &Vec<(u32, u32)>) -> Vec<u32> {
     update
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
+pub fn part_two(input: &str) -> Option<u64> {
     let (rules, updates) = parse_input(input);
 
     let mut acc = 0;
@@ -69,7 +69,7 @@ pub fn part_two(input: &str) -> Option<u32> {
         acc += update.get(mid).unwrap();
     }
 
-    Some(acc)
+    Some(acc as u64)
 }
 
 #[cfg(test)]
