@@ -90,16 +90,31 @@ pub fn part_two(input: &str) -> Option<u64> {
         g.prize.y += 10000000000000;
     });
 
-    let mut _total_tokens = 0;
-    for _game in data {
-        let _line1 = ();
+    let mut total_tokens = 0;
+    for game in data {
+        let (ax, ay, bx, by, px, py) = (
+            game.button_a.x as i64,
+            game.button_a.y as i64,
+            game.button_b.x as i64,
+            game.button_b.y as i64,
+            game.prize.x as i64,
+            game.prize.y as i64,
+        );
+        let num = bx * ax * py - bx * ay * px;
+        let div = by * ax - ay * bx;
+        // println!("{num} {div} {game:#?}");
 
-        _total_tokens += 1;
+        let meet = num / div;
+        let button_b = meet / bx;
+        let button_a = (px - button_b * bx) / ax;
+        // println!("{button_a} {button_b}");
+
+        if button_a * ay + button_b * by == py {
+            total_tokens += button_a as u64 * 3 + button_b as u64;
+        }
     }
 
-    _total_tokens = 480;
-
-    None
+    Some(total_tokens)
 }
 
 #[cfg(test)]
@@ -115,6 +130,6 @@ mod tests {
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        assert_eq!(result, Some(875318608908));
     }
 }
