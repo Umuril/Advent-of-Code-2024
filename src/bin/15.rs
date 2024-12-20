@@ -72,12 +72,6 @@ pub fn part_one(input: &str) -> Option<u64> {
     Some(acc)
 }
 
-fn is_rock(matrix: &mut Matrix<u8>, pos: &Point) -> bool {
-    let chr = *matrix.get(pos).unwrap();
-
-    chr == b'[' || chr == b']'
-}
-
 fn can_move(direction: Direction, matrix: &mut Matrix<u8>, guard_pos: Point) -> bool {
     let new_pos = guard_pos + direction.as_point();
     let new_chr = *matrix.get(&new_pos).unwrap();
@@ -113,16 +107,20 @@ fn can_move(direction: Direction, matrix: &mut Matrix<u8>, guard_pos: Point) -> 
                 return true;
             }
             if *next_byte == b'[' && direction == UP {
-                return can_move(direction, matrix, pos) && can_move(direction, matrix, pos + RIGHT.as_point());
+                return can_move(direction, matrix, pos)
+                    && can_move(direction, matrix, pos + RIGHT.as_point());
             }
             if *next_byte == b']' && direction == UP {
-                return can_move(direction, matrix, pos) && can_move(direction, matrix, pos + LEFT.as_point());
+                return can_move(direction, matrix, pos)
+                    && can_move(direction, matrix, pos + LEFT.as_point());
             }
             if *next_byte == b'[' && direction == DOWN {
-                return can_move(direction, matrix, pos) && can_move(direction, matrix, pos + RIGHT.as_point());
+                return can_move(direction, matrix, pos)
+                    && can_move(direction, matrix, pos + RIGHT.as_point());
             }
             if *next_byte == b']' && direction == DOWN {
-                return can_move(direction, matrix, pos) && can_move(direction, matrix, pos + LEFT.as_point());
+                return can_move(direction, matrix, pos)
+                    && can_move(direction, matrix, pos + LEFT.as_point());
             }
             pos += direction.as_point();
         }
@@ -146,23 +144,23 @@ fn move_part(direction: Direction, matrix: &mut Matrix<u8>, pos: Point) -> Point
     match direction {
         Direction::Left(_) | Direction::Right(_) => {
             move_part(direction, matrix, new_pos);
-        },
+        }
         Direction::Up(_) | Direction::Down(_) => {
             let new_pos_adjacent = match new_chr {
                 b'[' => new_pos + RIGHT.as_point(),
                 b']' => new_pos + LEFT.as_point(),
-                _ => unreachable!()
+                _ => unreachable!(),
             };
 
             move_part(direction, matrix, new_pos);
             move_part(direction, matrix, new_pos_adjacent);
-        },
+        }
     }
 
     matrix.update(&pos, b'.');
     matrix.update(&new_pos, old_chr);
 
-    return new_pos;
+    new_pos
 }
 
 pub fn part_two(input: &str) -> Option<u64> {
