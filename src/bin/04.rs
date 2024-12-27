@@ -1,3 +1,4 @@
+use advent_of_code::{Point, ALL_8_DIRECTIONS};
 use nom::{
     character::complete::{alpha1, line_ending},
     multi::separated_list1,
@@ -5,24 +6,13 @@ use nom::{
 
 advent_of_code::solution!(4);
 
-const ALL_DIRECTIONS: [(i32, i32); 8] = [
-    (1, 0),
-    (1, 1),
-    (0, 1),
-    (-1, 1),
-    (-1, 0),
-    (-1, -1),
-    (0, -1),
-    (1, -1),
-];
-
-fn search_from(start: (i32, i32), rows: &[&str]) -> u64 {
+fn search_from(start: Point, rows: &[&str]) -> u64 {
     let mut acc = 0;
-    for direction in ALL_DIRECTIONS {
+    for direction in *ALL_8_DIRECTIONS {
         let mut pointer = start;
         let mut found = true;
         for expected in "MAS".chars() {
-            pointer = (pointer.0 + direction.0, pointer.1 + direction.1);
+            pointer += direction;
             if pointer.0 < 0 || pointer.0 as usize >= rows.len() {
                 found = false;
                 break;
@@ -58,7 +48,7 @@ pub fn part_one(input: &str) -> Option<u64> {
     for (r, row) in rows.iter().enumerate() {
         for (c, chr) in row.chars().enumerate() {
             if chr == 'X' {
-                starts.push((r as i32, c as i32));
+                starts.push(Point(r as isize, c as isize));
             }
         }
     }

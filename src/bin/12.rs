@@ -1,10 +1,8 @@
 use itertools::Itertools;
 
-use advent_of_code::{Matrix, Point};
+use advent_of_code::{Matrix, Point, ALL_4_DIRECTIONS};
 
 advent_of_code::solution!(12);
-
-const ALL_DIRECTIONS: [Point; 4] = [Point(1, 0), Point(0, 1), Point(-1, 0), Point(0, -1)];
 
 fn search_part_one(start: Point, matrix: &mut Matrix<u8>) -> (u64, u64) {
     let mut area = 0;
@@ -25,7 +23,7 @@ fn search_part_one(start: Point, matrix: &mut Matrix<u8>) -> (u64, u64) {
         area += 1;
         perimeter += 4;
 
-        for direction in ALL_DIRECTIONS {
+        for direction in ALL_4_DIRECTIONS {
             let new_position = value + direction;
             let new_value = matrix.get(&new_position);
             if let Some(v) = new_value {
@@ -72,7 +70,7 @@ fn search_part_two(start: Point, matrix: &mut Matrix<u8>) -> (u64, u64) {
         let old_value = matrix.update(&value, b'#').unwrap();
 
         let mut neightboors = Vec::new();
-        for direction in ALL_DIRECTIONS {
+        for direction in ALL_4_DIRECTIONS {
             let new_value = matrix.get(&(value + direction));
             if let Some(v) = new_value {
                 if *v == old_value || *v == b'#' {
@@ -119,7 +117,7 @@ fn search_part_two(start: Point, matrix: &mut Matrix<u8>) -> (u64, u64) {
 
         area += 1;
 
-        for direction in ALL_DIRECTIONS {
+        for direction in ALL_4_DIRECTIONS {
             let new_position = value + direction;
             let new_value = matrix.get(&new_position);
             if let Some(v) = new_value {

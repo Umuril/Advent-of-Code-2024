@@ -6,6 +6,7 @@ use std::ops::{Add, AddAssign, Mul, Sub, SubAssign};
 use std::fmt::Debug;
 use std::fmt::Display;
 use std::fmt::Write;
+use std::sync::LazyLock;
 
 use forward_ref::{forward_ref_binop, forward_ref_op_assign};
 
@@ -36,6 +37,17 @@ impl<T: PartialEq> Matrix<T> {
         let pos = point.0 * self.cols + point.1;
 
         let chr = self.data.get(pos as usize).expect("Checked");
+        Some(chr)
+    }
+
+    pub fn get_mut(&mut self, point: &Point) -> Option<&mut T> {
+        if point.0 < 0 || point.1 < 0 || point.0 >= self.rows || point.1 >= self.cols {
+            return None;
+        }
+
+        let pos = point.0 * self.cols + point.1;
+
+        let chr = self.data.get_mut(pos as usize).expect("Checked");
         Some(chr)
     }
 
@@ -164,7 +176,7 @@ pub enum Direction {
 }
 
 impl Direction {
-    pub fn as_point(self) -> Point {
+    pub const fn as_point(self) -> Point {
         match self {
             Direction::Up(p) => p,
             Direction::Down(p) => p,
@@ -194,7 +206,36 @@ impl Display for Direction {
     }
 }
 
+impl Add for Direction {
+    type Output = Point;
+
+    fn add(self, other: Self) -> Point {
+        self.as_point() + other.as_point()
+    }
+}
+
+forward_ref_binop!(impl Add, add for Direction, Direction);
+
 pub static UP: Direction = Direction::Up(Point(-1, 0));
 pub static DOWN: Direction = Direction::Down(Point(1, 0));
 pub static LEFT: Direction = Direction::Left(Point(0, -1));
 pub static RIGHT: Direction = Direction::Right(Point(0, 1));
+
+pub static ALL_4_DIRECTIONS: [Point; 4] = [
+    UP.as_point(),
+    DOWN.as_point(),
+    LEFT.as_point(),
+    RIGHT.as_point(),
+];
+pub static ALL_8_DIRECTIONS: LazyLock<[Point; 8]> = std::sync::LazyLock::new(|| {
+    [
+        UP.as_point(),
+        UP + RIGHT,
+        RIGHT.as_point(),
+        RIGHT + DOWN,
+        DOWN.as_point(),
+        DOWN + LEFT,
+        LEFT.as_point(),
+        LEFT + UP,
+    ]
+});

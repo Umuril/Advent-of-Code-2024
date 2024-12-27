@@ -1,10 +1,9 @@
 use std::collections::HashSet;
 
-use advent_of_code::{Matrix, Point};
+use advent_of_code::{Matrix, Point, ALL_4_DIRECTIONS};
 
 advent_of_code::solution!(10);
 
-const ALL_DIRECTIONS: [Point; 4] = [Point(1, 0), Point(0, 1), Point(-1, 0), Point(0, -1)];
 fn dfs_part_one(position: Point, matrix: &Matrix<u8>) -> HashSet<Point> {
     let mut acc = HashSet::new();
     let current_value = matrix.get(&position).expect("Checked");
@@ -13,7 +12,7 @@ fn dfs_part_one(position: Point, matrix: &Matrix<u8>) -> HashSet<Point> {
         acc.insert(position);
         return acc;
     }
-    for direction in ALL_DIRECTIONS {
+    for direction in ALL_4_DIRECTIONS {
         let new_position = position + direction;
         if let Some(p) = matrix.get(&new_position) {
             if *p == *current_value + 1 {
@@ -54,7 +53,7 @@ fn dfs_part_two(position: Point, matrix: &Matrix<u8>) -> u64 {
     if *current_value == b'9' {
         return 1;
     }
-    for direction in ALL_DIRECTIONS {
+    for direction in ALL_4_DIRECTIONS {
         let new_position = position + direction;
         if let Some(p) = matrix.get(&new_position) {
             if *p == *current_value + 1 {
