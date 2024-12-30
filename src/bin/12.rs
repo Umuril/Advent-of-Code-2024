@@ -71,7 +71,8 @@ fn search_part_two(start: Point, matrix: &mut Matrix<u8>) -> (u64, u64) {
 
         let mut neightboors = Vec::new();
         for direction in ALL_4_DIRECTIONS {
-            let new_value = matrix.get(&(value + direction));
+            let new_position = value + direction;
+            let new_value = matrix.get(&new_position);
             if let Some(v) = new_value {
                 if *v == old_value || *v == b'#' {
                     neightboors.push(direction);
@@ -87,7 +88,7 @@ fn search_part_two(start: Point, matrix: &mut Matrix<u8>) -> (u64, u64) {
             0 => 4,
             1 => 2,
             2 => {
-                if neightboors[0] + neightboors[1] == Point(0, 0) {
+                if neightboors[0] == neightboors[1].opposite_direction() {
                     0 // Opposti
                 } else {
                     let v = *matrix
@@ -103,7 +104,7 @@ fn search_part_two(start: Point, matrix: &mut Matrix<u8>) -> (u64, u64) {
             3 | 4 => {
                 let mut acc = 0;
                 for combo in neightboors.iter().combinations(2) {
-                    let v = *matrix.get(&(value + combo[0] + combo[1])).unwrap();
+                    let v = *matrix.get(&((value + *combo[0]) + *combo[1])).unwrap();
                     if v != old_value && v != b'#' {
                         acc += 1;
                     }

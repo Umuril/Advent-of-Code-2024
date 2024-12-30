@@ -1,4 +1,4 @@
-use advent_of_code::{Point, ALL_8_DIRECTIONS};
+use advent_of_code::{Point, ALL_8_POINTS};
 use nom::{
     character::complete::{alpha1, line_ending},
     multi::separated_list1,
@@ -8,7 +8,7 @@ advent_of_code::solution!(4);
 
 fn search_from(start: Point, rows: &[&str]) -> u64 {
     let mut acc = 0;
-    for direction in *ALL_8_DIRECTIONS {
+    for direction in *ALL_8_POINTS {
         let mut pointer = start;
         let mut found = true;
         for expected in "MAS".chars() {

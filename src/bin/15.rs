@@ -30,7 +30,7 @@ pub fn part_one(input: &str) -> Option<u64> {
             _ => unreachable!(),
         };
 
-        let mut next_pos = guard_pos + direction.as_point();
+        let mut next_pos = guard_pos + direction;
 
         // println!("GUARD: {} - NEXT: {} - DIRECTION: {}", guard_pos, next_pos, direction);
 
@@ -40,7 +40,7 @@ pub fn part_one(input: &str) -> Option<u64> {
                 break;
             }
             if *next_byte == b'O' {
-                next_pos += direction.as_point();
+                next_pos += direction;
                 continue;
             }
             if *next_byte == b'.' {
@@ -53,7 +53,7 @@ pub fn part_one(input: &str) -> Option<u64> {
 
                     next_pos += direction.opposite_point();
                 }
-                guard_pos += direction.as_point();
+                guard_pos += direction;
 
                 break;
             }
@@ -73,7 +73,7 @@ pub fn part_one(input: &str) -> Option<u64> {
 }
 
 fn can_move(direction: Direction, matrix: &mut Matrix<u8>, guard_pos: Point) -> bool {
-    let new_pos = guard_pos + direction.as_point();
+    let new_pos = guard_pos + direction;
     let new_chr = *matrix.get(&new_pos).unwrap();
 
     if new_chr == b'.' {
@@ -85,7 +85,7 @@ fn can_move(direction: Direction, matrix: &mut Matrix<u8>, guard_pos: Point) -> 
     }
 
     // []
-    let mut pos = guard_pos + direction.as_point();
+    let mut pos = guard_pos + direction;
     if direction == LEFT || direction == RIGHT {
         while let Some(next_byte) = matrix.get(&pos) {
             if *next_byte == b'#' {
@@ -94,7 +94,7 @@ fn can_move(direction: Direction, matrix: &mut Matrix<u8>, guard_pos: Point) -> 
             if *next_byte == b'.' {
                 return true;
             }
-            pos += direction.as_point();
+            pos += direction;
         }
     }
 
@@ -108,21 +108,19 @@ fn can_move(direction: Direction, matrix: &mut Matrix<u8>, guard_pos: Point) -> 
             }
             if *next_byte == b'[' && direction == UP {
                 return can_move(direction, matrix, pos)
-                    && can_move(direction, matrix, pos + RIGHT.as_point());
+                    && can_move(direction, matrix, pos + RIGHT);
             }
             if *next_byte == b']' && direction == UP {
-                return can_move(direction, matrix, pos)
-                    && can_move(direction, matrix, pos + LEFT.as_point());
+                return can_move(direction, matrix, pos) && can_move(direction, matrix, pos + LEFT);
             }
             if *next_byte == b'[' && direction == DOWN {
                 return can_move(direction, matrix, pos)
-                    && can_move(direction, matrix, pos + RIGHT.as_point());
+                    && can_move(direction, matrix, pos + RIGHT);
             }
             if *next_byte == b']' && direction == DOWN {
-                return can_move(direction, matrix, pos)
-                    && can_move(direction, matrix, pos + LEFT.as_point());
+                return can_move(direction, matrix, pos) && can_move(direction, matrix, pos + LEFT);
             }
-            pos += direction.as_point();
+            pos += direction;
         }
     }
 
@@ -131,7 +129,7 @@ fn can_move(direction: Direction, matrix: &mut Matrix<u8>, guard_pos: Point) -> 
 
 fn move_part(direction: Direction, matrix: &mut Matrix<u8>, pos: Point) -> Point {
     let old_chr = *matrix.get(&pos).unwrap();
-    let new_pos = pos + direction.as_point();
+    let new_pos = pos + direction;
     // println!("move_part: {direction} {pos}");
     let new_chr = *matrix.get(&new_pos).unwrap();
 
@@ -147,8 +145,8 @@ fn move_part(direction: Direction, matrix: &mut Matrix<u8>, pos: Point) -> Point
         }
         Direction::Up(_) | Direction::Down(_) => {
             let new_pos_adjacent = match new_chr {
-                b'[' => new_pos + RIGHT.as_point(),
-                b']' => new_pos + LEFT.as_point(),
+                b'[' => new_pos + RIGHT,
+                b']' => new_pos + LEFT,
                 _ => unreachable!(),
             };
 

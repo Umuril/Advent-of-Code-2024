@@ -185,12 +185,32 @@ impl Direction {
         }
     }
 
-    pub fn opposite_point(self) -> Point {
+    pub const fn opposite_point(self) -> Point {
         match self {
-            Direction::Up(_) => DOWN.as_point(),
-            Direction::Down(_) => UP.as_point(),
-            Direction::Left(_) => RIGHT.as_point(),
-            Direction::Right(_) => LEFT.as_point(),
+            Direction::Up(_) => DOWN,
+            Direction::Down(_) => UP,
+            Direction::Left(_) => RIGHT,
+            Direction::Right(_) => LEFT,
+        }
+        .as_point()
+    }
+
+    pub const fn opposite_direction(self) -> Self {
+        match self {
+            Direction::Up(_) => DOWN,
+            Direction::Down(_) => UP,
+            Direction::Left(_) => RIGHT,
+            Direction::Right(_) => LEFT,
+        }
+    }
+
+    pub fn from_point(point: Point) -> Self {
+        match point {
+            Point(-1, 0) => UP,
+            Point(1, 0) => DOWN,
+            Point(0, -1) => LEFT,
+            Point(0, 1) => RIGHT,
+            _ => panic!("This is not a direction: {}", point),
         }
     }
 }
@@ -221,13 +241,8 @@ pub static DOWN: Direction = Direction::Down(Point(1, 0));
 pub static LEFT: Direction = Direction::Left(Point(0, -1));
 pub static RIGHT: Direction = Direction::Right(Point(0, 1));
 
-pub static ALL_4_DIRECTIONS: [Point; 4] = [
-    UP.as_point(),
-    DOWN.as_point(),
-    LEFT.as_point(),
-    RIGHT.as_point(),
-];
-pub static ALL_8_DIRECTIONS: LazyLock<[Point; 8]> = std::sync::LazyLock::new(|| {
+pub static ALL_4_DIRECTIONS: [Direction; 4] = [UP, DOWN, LEFT, RIGHT];
+pub static ALL_8_POINTS: LazyLock<[Point; 8]> = std::sync::LazyLock::new(|| {
     [
         UP.as_point(),
         UP + RIGHT,
@@ -239,3 +254,19 @@ pub static ALL_8_DIRECTIONS: LazyLock<[Point; 8]> = std::sync::LazyLock::new(|| 
         LEFT + UP,
     ]
 });
+
+impl Add<Direction> for Point {
+    type Output = Self;
+
+    fn add(self, other: Direction) -> Self {
+        Self(self.0 + other.as_point().0, self.1 + other.as_point().1)
+    }
+}
+
+impl AddAssign<Direction> for Point {
+    #[inline]
+    fn add_assign(&mut self, other: Direction) {
+        self.0 += other.as_point().0;
+        self.1 += other.as_point().1;
+    }
+}
