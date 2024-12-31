@@ -65,7 +65,7 @@ macro_rules! solution {
             use $crate::template::runner::*;
             let input = $crate::template::read_file("inputs", DAY);
             let output = $crate::template::read_file("outputs", DAY);
-            let expected : Vec<u64> = output.split("\n").map(|x| x.parse::<u64>().unwrap_or_default()).collect();
+            let expected : Vec<String> = output.split("\n").map(|x| x.to_owned()).collect();
             $( run_part($func, &input, DAY, $part, &expected); )*
         }
     };

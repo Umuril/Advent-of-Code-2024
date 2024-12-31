@@ -5,7 +5,7 @@ use advent_of_code::Matrix;
 use advent_of_code::Point;
 advent_of_code::solution!(8);
 
-pub fn part_one(input: &str) -> Option<u64> {
+pub fn part_one(input: &str) -> Option<String> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
     let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
@@ -33,10 +33,10 @@ pub fn part_one(input: &str) -> Option<u64> {
         }
     }
 
-    Some(result.len() as u64)
+    Some(result.len().to_string())
 }
 
-pub fn part_two(input: &str) -> Option<u64> {
+pub fn part_two(input: &str) -> Option<String> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
     let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
@@ -66,7 +66,7 @@ pub fn part_two(input: &str) -> Option<u64> {
         }
     }
 
-    Some(result.len() as u64)
+    Some(result.len().to_string())
 }
 
 #[cfg(test)]
@@ -76,12 +76,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(14));
+        assert_eq!(result, Some("14".to_string()));
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(34));
+        assert_eq!(result, Some("34".to_string()));
     }
 }

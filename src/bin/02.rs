@@ -21,15 +21,15 @@ fn parse_input(input: &str) -> Vec<Vec<u32>> {
     result.expect("Correct input format").1
 }
 
-pub fn part_one(input: &str) -> Option<u64> {
+pub fn part_one(input: &str) -> Option<String> {
     let data = parse_input(input);
 
     let total = data.iter().filter(|row| check_row(row)).count();
 
-    Some(total as u64)
+    Some(total.to_string())
 }
 
-pub fn part_two(input: &str) -> Option<u64> {
+pub fn part_two(input: &str) -> Option<String> {
     let data = parse_input(input);
 
     let total = data
@@ -56,7 +56,7 @@ pub fn part_two(input: &str) -> Option<u64> {
         })
         .count();
 
-    Some(total as u64)
+    Some(total.to_string())
 }
 
 #[cfg(test)]
@@ -66,12 +66,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(2));
+        assert_eq!(result, Some("2".to_string()));
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(4));
+        assert_eq!(result, Some("4".to_string()));
     }
 }

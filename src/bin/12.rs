@@ -40,7 +40,7 @@ fn search_part_one(start: Point, matrix: &mut Matrix<u8>) -> (u64, u64) {
     (area, perimeter as u64)
 }
 
-pub fn part_one(input: &str) -> Option<u64> {
+pub fn part_one(input: &str) -> Option<String> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
     let mut matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
@@ -54,7 +54,7 @@ pub fn part_one(input: &str) -> Option<u64> {
         }
     }
 
-    Some(acc)
+    Some(acc.to_string())
 }
 fn search_part_two(start: Point, matrix: &mut Matrix<u8>) -> (u64, u64) {
     let mut area = 0;
@@ -140,7 +140,7 @@ fn search_part_two(start: Point, matrix: &mut Matrix<u8>) -> (u64, u64) {
     (area, corners)
 }
 
-pub fn part_two(input: &str) -> Option<u64> {
+pub fn part_two(input: &str) -> Option<String> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
     let mut matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
@@ -154,7 +154,7 @@ pub fn part_two(input: &str) -> Option<u64> {
         }
     }
 
-    Some(acc)
+    Some(acc.to_string())
 }
 
 #[cfg(test)]
@@ -164,12 +164,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(1930));
+        assert_eq!(result, Some("1930".to_string()));
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(1206));
+        assert_eq!(result, Some("1206".to_string()));
     }
 }

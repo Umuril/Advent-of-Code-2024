@@ -16,7 +16,7 @@ const MAX_Y: u32 = 103;
 const MID_X: u32 = MAX_X / 2;
 const MID_Y: u32 = MAX_Y / 2;
 
-pub fn part_one(input: &str) -> Option<u64> {
+pub fn part_one(input: &str) -> Option<String> {
     let new_line = line_ending::<&str, ()>;
     let result = separated_list1(
         new_line,
@@ -55,10 +55,10 @@ pub fn part_one(input: &str) -> Option<u64> {
         }
     }
 
-    Some(a * b * c * d)
+    Some((a * b * c * d).to_string())
 }
 
-pub fn part_two(input: &str) -> Option<u64> {
+pub fn part_two(input: &str) -> Option<String> {
     let new_line = line_ending::<&str, ()>;
     let result = separated_list1(
         new_line,
@@ -94,7 +94,7 @@ pub fn part_two(input: &str) -> Option<u64> {
 
         if let Ok(s) = str::from_utf8(matrix.data.as_slice()) {
             if s.contains("###########") {
-                return Some(sec as u64);
+                return Some(sec.to_string());
             }
         }
     }
@@ -109,12 +109,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(21));
+        assert_eq!(result, Some("21".to_string()));
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("inputs", DAY));
-        assert_eq!(result, Some(6446));
+        assert_eq!(result, Some("6446".to_string()));
     }
 }

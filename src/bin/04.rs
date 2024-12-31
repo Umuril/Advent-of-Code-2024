@@ -38,7 +38,7 @@ fn search_from(start: Point, rows: &[&str]) -> u64 {
     acc
 }
 
-pub fn part_one(input: &str) -> Option<u64> {
+pub fn part_one(input: &str) -> Option<String> {
     let new_line = line_ending::<&str, ()>;
     let result = separated_list1(new_line, alpha1)(input);
     let rows: Vec<&str> = result.expect("Correct input format").1;
@@ -58,7 +58,7 @@ pub fn part_one(input: &str) -> Option<u64> {
         acc += search_from(start, &rows);
     }
 
-    Some(acc)
+    Some(acc.to_string())
 }
 
 fn search_cross(start: (i32, i32), rows: &[&str]) -> u64 {
@@ -95,7 +95,7 @@ fn search_cross(start: (i32, i32), rows: &[&str]) -> u64 {
     }
 }
 
-pub fn part_two(input: &str) -> Option<u64> {
+pub fn part_two(input: &str) -> Option<String> {
     let new_line = line_ending::<&str, ()>;
     let result = separated_list1(new_line, alpha1)(input);
     let rows: Vec<&str> = result.expect("Correct input format").1;
@@ -115,7 +115,7 @@ pub fn part_two(input: &str) -> Option<u64> {
         acc += search_cross(start, &rows);
     }
 
-    Some(acc)
+    Some(acc.to_string())
 }
 
 #[cfg(test)]
@@ -125,12 +125,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(18));
+        assert_eq!(result, Some("18".to_string()));
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(9));
+        assert_eq!(result, Some("9".to_string()));
     }
 }

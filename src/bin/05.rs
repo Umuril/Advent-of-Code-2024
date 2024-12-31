@@ -27,7 +27,7 @@ fn find_rule(rules: &Vec<(u32, u32)>, pair: &[u32]) -> bool {
     false
 }
 
-pub fn part_one(input: &str) -> Option<u64> {
+pub fn part_one(input: &str) -> Option<String> {
     let (rules, updates) = parse_input(input);
     let mut acc = 0;
     for update in &updates {
@@ -37,7 +37,7 @@ pub fn part_one(input: &str) -> Option<u64> {
         }
     }
 
-    Some(acc as u64)
+    Some(acc.to_string())
 }
 
 fn sort_by_rules(mut update: Vec<u32>, rules: &Vec<(u32, u32)>) -> Vec<u32> {
@@ -56,7 +56,7 @@ fn sort_by_rules(mut update: Vec<u32>, rules: &Vec<(u32, u32)>) -> Vec<u32> {
     update
 }
 
-pub fn part_two(input: &str) -> Option<u64> {
+pub fn part_two(input: &str) -> Option<String> {
     let (rules, updates) = parse_input(input);
 
     let mut acc = 0;
@@ -69,7 +69,7 @@ pub fn part_two(input: &str) -> Option<u64> {
         acc += update.get(mid).unwrap();
     }
 
-    Some(acc as u64)
+    Some(acc.to_string())
 }
 
 #[cfg(test)]
@@ -79,12 +79,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(143));
+        assert_eq!(result, Some("143".to_string()));
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(123));
+        assert_eq!(result, Some("123".to_string()));
     }
 }

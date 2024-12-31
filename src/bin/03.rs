@@ -28,14 +28,16 @@ fn parse_part_one(input: &str) -> Vec<(u32, u32)> {
     x.expect("Correct input format").1
 }
 
-pub fn part_one(input: &str) -> Option<u64> {
+pub fn part_one(input: &str) -> Option<String> {
     let data = parse_part_one(input);
     Some(
-        data.iter()
+        (data
+            .iter()
             .filter(|(x, y)| *x < 1000 && *y < 1000)
             .map(|(x, y)| *x * *y)
             .map(|x| x as u64)
-            .sum(),
+            .sum::<u64>())
+        .to_string(),
     )
 }
 
@@ -76,7 +78,7 @@ fn parse_part_two(input: &str) -> State {
     x.expect("Correct input format").1
 }
 
-pub fn part_two(input: &str) -> Option<u64> {
+pub fn part_two(input: &str) -> Option<String> {
     let data = parse_part_two(input);
     Some(
         data.pairs
@@ -84,7 +86,8 @@ pub fn part_two(input: &str) -> Option<u64> {
             .filter(|(x, y)| *x < 1000 && *y < 1000)
             .map(|(x, y)| *x * *y)
             .map(|x| x as u64)
-            .sum(),
+            .sum::<u64>()
+            .to_string(),
     )
 }
 
@@ -95,12 +98,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(161));
+        assert_eq!(result, Some("161".to_string()));
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(48));
+        assert_eq!(result, Some("48".to_string()));
     }
 }

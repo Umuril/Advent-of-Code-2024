@@ -9,25 +9,25 @@ use std::{cmp, env, process};
 use crate::template::{aoc_cli, Day, ANSI_BOLD_GREEN, ANSI_BOLD_RED, ANSI_ITALIC, ANSI_RESET};
 
 pub fn run_part<I: Copy>(
-    func: impl Fn(I) -> Option<u64>,
+    func: impl Fn(I) -> Option<String>,
     input: I,
     day: Day,
     part: u8,
-    expected: &[u64],
+    expected: &[String],
 ) {
     let part_str = format!("Part {part}");
 
-    let expected = expected.get(part as usize - 1).unwrap_or(&0u64);
+    let expected = expected.get(part as usize - 1).cloned().unwrap_or_default();
 
     let (result, duration, samples) = run_timed(func, input, |result| {
-        print_result(result, &part_str, "", expected)
+        print_result(result, &part_str, "", &expected)
     });
 
     print_result(
         &result,
         &part_str,
         &format_duration(&duration, samples),
-        expected,
+        &expected,
     );
 
     if let Some(result) = result {

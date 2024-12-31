@@ -4,7 +4,7 @@ use advent_of_code::{Direction, Matrix, Point, ALL_4_DIRECTIONS, RIGHT};
 
 advent_of_code::solution!(16);
 
-fn dfs_part_one(matrix: &mut Matrix<Cell>, start: Point) -> Option<u64> {
+fn dfs_part_one(matrix: &mut Matrix<Cell>, start: Point) -> Option<String> {
     let mut queue: Vec<(Direction, Point, u64)> = Vec::new();
     queue.push((RIGHT, start, 0));
 
@@ -44,7 +44,7 @@ fn dfs_part_one(matrix: &mut Matrix<Cell>, start: Point) -> Option<u64> {
 
     let end_cell = matrix.get(&end).unwrap();
 
-    get_optimal(end_cell)
+    get_optimal(end_cell).map(|x| x.to_string())
 }
 
 #[derive(Clone)]
@@ -82,7 +82,7 @@ impl PartialEq for Cell {
 //     }
 // }
 
-pub fn part_one(input: &str) -> Option<u64> {
+pub fn part_one(input: &str) -> Option<String> {
     let nrows = input
         .trim()
         .as_bytes()
@@ -115,7 +115,7 @@ fn get_optimal(cell: &Cell) -> Option<u64> {
     cell.next.values().min().copied()
 }
 
-fn dfs_part_two(matrix: &mut Matrix<Cell>, start: Point) -> Option<u64> {
+fn dfs_part_two(matrix: &mut Matrix<Cell>, start: Point) -> Option<String> {
     let mut queue: Vec<(Direction, Point, u64)> = Vec::new();
     queue.push((RIGHT, start, 0));
 
@@ -192,10 +192,10 @@ fn dfs_part_two(matrix: &mut Matrix<Cell>, start: Point) -> Option<u64> {
 
     // print_matrix(&matrix);
 
-    Some(2 + paths.len() as u64)
+    Some((2 + paths.len() as u64).to_string())
 }
 
-pub fn part_two(input: &str) -> Option<u64> {
+pub fn part_two(input: &str) -> Option<String> {
     let nrows = input
         .trim()
         .as_bytes()
@@ -231,12 +231,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(11048));
+        assert_eq!(result, Some("11048".to_string()));
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(64));
+        assert_eq!(result, Some("64".to_string()));
     }
 }

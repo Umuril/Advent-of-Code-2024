@@ -2,7 +2,7 @@ use nom::InputIter;
 
 advent_of_code::solution!(9);
 
-pub fn part_one(input: &str) -> Option<u64> {
+pub fn part_one(input: &str) -> Option<String> {
     let lengths: Vec<u32> = input
         .trim()
         .iter_elements()
@@ -47,7 +47,7 @@ pub fn part_one(input: &str) -> Option<u64> {
         .enumerate()
         .fold(0, |x, y| x + y.0 * y.1);
 
-    Some(result as u64)
+    Some(result.to_string())
 }
 
 #[derive(Debug, Clone)]
@@ -56,7 +56,7 @@ enum Type {
     Empty(u32),     // Len
 }
 
-pub fn part_two(input: &str) -> Option<u64> {
+pub fn part_two(input: &str) -> Option<String> {
     let lengths: Vec<u32> = input
         .trim()
         .iter_elements()
@@ -134,7 +134,7 @@ pub fn part_two(input: &str) -> Option<u64> {
         }
     }
 
-    Some(acc)
+    Some(acc.to_string())
 }
 
 #[cfg(test)]
@@ -144,12 +144,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(1928));
+        assert_eq!(result, Some("1928".to_string()));
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(2858));
+        assert_eq!(result, Some("2858".to_string()));
     }
 }

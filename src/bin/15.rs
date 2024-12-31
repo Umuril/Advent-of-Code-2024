@@ -4,7 +4,7 @@ use advent_of_code::{Direction, Matrix, Point, DOWN, LEFT, RIGHT, UP};
 
 advent_of_code::solution!(15);
 
-pub fn part_one(input: &str) -> Option<u64> {
+pub fn part_one(input: &str) -> Option<String> {
     let (part_a, part_b) = input
         .trim()
         .split_once("\n\n")
@@ -69,7 +69,7 @@ pub fn part_one(input: &str) -> Option<u64> {
         }
     }
 
-    Some(acc)
+    Some(acc.to_string())
 }
 
 fn can_move(direction: Direction, matrix: &mut Matrix<u8>, guard_pos: Point) -> bool {
@@ -161,7 +161,7 @@ fn move_part(direction: Direction, matrix: &mut Matrix<u8>, pos: Point) -> Point
     new_pos
 }
 
-pub fn part_two(input: &str) -> Option<u64> {
+pub fn part_two(input: &str) -> Option<String> {
     let (part_a, part_b) = input
         .trim()
         .split_once("\n\n")
@@ -210,7 +210,7 @@ pub fn part_two(input: &str) -> Option<u64> {
         }
     }
 
-    Some(acc)
+    Some(acc.to_string())
 }
 
 #[cfg(test)]
@@ -220,12 +220,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(10092));
+        assert_eq!(result, Some("10092".to_string()));
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(9021));
+        assert_eq!(result, Some("9021".to_string()));
     }
 }

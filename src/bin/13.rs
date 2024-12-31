@@ -55,7 +55,7 @@ fn get_game_info(game: &Game, pressed: (u64, u64)) -> Option<u64> {
     Some(pressed.0 * 3 + pressed.1)
 }
 
-pub fn part_one(input: &str) -> Option<u64> {
+pub fn part_one(input: &str) -> Option<String> {
     let data = separated_list1(tag("\n\n"), parse_part_one)(input.trim())
         .expect("Correct input format")
         .1;
@@ -77,10 +77,10 @@ pub fn part_one(input: &str) -> Option<u64> {
         }
     }
 
-    Some(total_tokens)
+    Some(total_tokens.to_string())
 }
 
-pub fn part_two(input: &str) -> Option<u64> {
+pub fn part_two(input: &str) -> Option<String> {
     let mut data = separated_list1(tag("\n\n"), parse_part_one)(input.trim())
         .expect("Correct input format")
         .1;
@@ -114,7 +114,7 @@ pub fn part_two(input: &str) -> Option<u64> {
         }
     }
 
-    Some(total_tokens)
+    Some(total_tokens.to_string())
 }
 
 #[cfg(test)]
@@ -124,12 +124,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(480));
+        assert_eq!(result, Some("480".to_string()));
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(875318608908));
+        assert_eq!(result, Some("875318608908".to_string()));
     }
 }

@@ -26,7 +26,7 @@ fn dfs_part_one(position: Point, matrix: &Matrix<u8>) -> HashSet<Point> {
 
     acc
 }
-pub fn part_one(input: &str) -> Option<u64> {
+pub fn part_one(input: &str) -> Option<String> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
     let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
@@ -43,7 +43,7 @@ pub fn part_one(input: &str) -> Option<u64> {
         acc += dfs_part_one(start, &matrix).len() as u64;
     }
 
-    Some(acc)
+    Some(acc.to_string())
 }
 
 fn dfs_part_two(position: Point, matrix: &Matrix<u8>) -> u64 {
@@ -65,7 +65,7 @@ fn dfs_part_two(position: Point, matrix: &Matrix<u8>) -> u64 {
     acc
 }
 
-pub fn part_two(input: &str) -> Option<u64> {
+pub fn part_two(input: &str) -> Option<String> {
     let rows = input.trim().split('\n').collect::<Vec<&str>>();
     let matrix = Matrix::from(rows.len(), rows.len(), rows.join("").into());
 
@@ -82,7 +82,7 @@ pub fn part_two(input: &str) -> Option<u64> {
         acc += dfs_part_two(start, &matrix);
     }
 
-    Some(acc)
+    Some(acc.to_string())
 }
 
 #[cfg(test)]
@@ -92,12 +92,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(36));
+        assert_eq!(result, Some("36".to_string()));
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, Some(81));
+        assert_eq!(result, Some("81".to_string()));
     }
 }
