@@ -19,6 +19,16 @@ pub struct Matrix<T> {
     pub data: Vec<T>,
 }
 
+impl<T: Clone> Matrix<T> {
+    pub fn empty(rows: usize, cols: usize, filler: T) -> Matrix<T> {
+        Matrix {
+            cols: cols as isize,
+            rows: rows as isize,
+            data: vec![filler; rows * cols],
+        }
+    }
+}
+
 impl<T: PartialEq> Matrix<T> {
     pub fn from(rows: usize, cols: usize, data: Vec<T>) -> Matrix<T> {
         assert_eq!(data.len(), rows * cols);
