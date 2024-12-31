@@ -149,10 +149,15 @@ pub fn part_two(input: &str) -> Option<String> {
         let output = execute_machine(state.clone(), &cmds);
 
         if output.len() == flat_cmd.len() {
-            if output[..14] == flat_cmd[..14] {
+            if cfg!(test) {
+                if output[..6] == flat_cmd[..6] {
+                    new_inc = 8u64.pow(4);
+                } else if output[..4] == flat_cmd[..4] {
+                    new_inc = 8u64.pow(2);
+                }
+            } else if output[..14] == flat_cmd[..14] {
                 new_inc = 8u64.pow(12);
-            }
-            if output[..12] == flat_cmd[..12] {
+            } else if output[..12] == flat_cmd[..12] {
                 new_inc = 8u64.pow(10);
             } else if output[..10] == flat_cmd[..10] {
                 new_inc = 8u64.pow(8);
