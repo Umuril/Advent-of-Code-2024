@@ -1,14 +1,8 @@
 use std::collections::{HashMap, HashSet};
 
-use nom::{
-    bytes::complete::tag,
-    character::complete::alpha1,
-    multi::separated_list1,
-    IResult,
-};
+use nom::{bytes::complete::tag, character::complete::alpha1, multi::separated_list1, IResult};
 
 advent_of_code::solution!(19);
-
 
 fn parse_input(input: &str) -> IResult<&str, (Vec<&str>, Vec<&str>)> {
     let (input, patterns) = separated_list1(tag(", "), alpha1)(input)?;
@@ -25,17 +19,16 @@ fn check(patterns: &Vec<&str>, design: &str) -> bool {
     while let Some(d) = queue.iter().next().cloned() {
         queue.remove(&d);
         // println!("{:?}", queue);
-        if d.len() == 0 {
+        if d.is_empty() {
             return true;
         }
         // println!("Trying: {d}");
         for pattern in patterns {
-            if d.starts_with(pattern) {
-                queue.insert(&d[pattern.len()..]);
+            if let Some(substring) = d.strip_prefix(pattern) {
+                queue.insert(substring);
             }
         }
     }
-
 
     false
 }
@@ -59,32 +52,27 @@ fn count(patterns: &Vec<&str>, design: &str) -> u64 {
     let mut acc = 0;
 
     loop {
-        if queue.len() == 0 {
-            break
+        if queue.is_empty() {
+            break;
         }
-        let d = queue.clone().into_keys().next().unwrap();
-        let c = queue.remove(d).unwrap();
-        // println!("Trying: [{d}]");
-        if d.len() == 0 {
-            // println!("Incrementing {acc} by {c}");
-            acc += c;
+        let old_key = queue.clone().into_keys().next().unwrap();
+        let old_val = queue.remove(old_key).unwrap();
+
+        if old_key.is_empty() {
+            acc += old_val;
             continue;
         }
+
         for pattern in patterns {
-            if d.starts_with(pattern) {
-                let key = &d[pattern.len()..];
-                let mut val = c;
-                if queue.contains_key(key) {
-                    let v = queue.get(key).unwrap();
-                    val += *v;
+            if let Some(substring) = old_key.strip_prefix(pattern) {
+                let mut val = old_val;
+                if queue.contains_key(substring) {
+                    val += *queue.get(substring).unwrap();
                 }
-                // println!("Inserting: {key} {val}");
-                queue.insert(key, val);
+                queue.insert(substring, val);
             }
         }
     }
-
-    // println!("Trying: {design} {acc}");
 
     acc
 }
