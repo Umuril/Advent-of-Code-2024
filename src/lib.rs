@@ -123,6 +123,12 @@ impl<T: Display + PartialEq> Debug for Matrix<T> {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct Point(pub isize, pub isize);
 
+impl Point {
+    pub fn distance(&self, other: Self) -> isize {
+        (self.0 - other.0).abs() + (self.1 - other.1).abs()
+    }
+}
+
 impl Display for Point {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("({}, {})", self.0, self.1))
